@@ -1,6 +1,7 @@
 from typing import Annotated
+from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
 class SUserAuth(BaseModel):
@@ -15,3 +16,9 @@ class SMessageForUserResponse(BaseModel):
     email: EmailStr
 
 
+class SUserRead(BaseModel):
+    id: UUID
+    email: EmailStr
+    is_active: bool
+
+    model_config = ConfigDict(from_attributes=True)

@@ -1,8 +1,8 @@
-"""initial_users_table
+"""add is_active
 
-Revision ID: ce064b656c07
-Revises: 2b5b8c515f84
-Create Date: 2026-07-07 20:15:44.690330
+Revision ID: 4553a676de90
+Revises: 
+Create Date: 2026-07-08 20:03:17.791853
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ce064b656c07'
-down_revision: Union[str, Sequence[str], None] = '2b5b8c515f84'
+revision: str = '4553a676de90'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -25,6 +25,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('hashed_password', sa.String(), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
