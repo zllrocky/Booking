@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, delete, update
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import async_session_maker
@@ -28,3 +28,18 @@ class BaseDAO:
                 print(f'Database error {e}')
                 return None
 
+
+    @classmethod
+    async def delete(cls, **filter_by):
+        async with async_session_maker() as session:
+            query = delete(cls.model).filter_by(**filter_by)
+            await session.execute(query)
+            await session.commit()
+
+
+    @classmethod
+    async def update(cls, filter_by: dict, data: dict):
+        async with async_session_maker() as session:
+            query = update(cls.model).filter_by(**filter_by).values(**data)
+            await session.execute(query)
+            await session.commit()
