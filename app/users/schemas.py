@@ -13,11 +13,6 @@ class SUserAuth(BaseModel):
     password: OptionalPassword
 
 
-class SMessageForUserResponse(BaseModel):
-    message: str
-    email: EmailStr
-
-
 class SUserRead(BaseModel):
     id: UUID
     email: EmailStr

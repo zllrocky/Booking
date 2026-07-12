@@ -15,6 +15,7 @@ async def register_user(user_data: SUserAuth):
     new_user = await UsersDAO.add(email=user_data.email, hashed_password=hashed_password)
     if not new_user:
         raise HTTPException(status_code=500, detail='Internal Server Error')
+    return new_user
 
 
 async def login_user(user_data: SUserAuth):
@@ -47,7 +48,8 @@ async def update_user(user_id: UUID, user_data: SUserUpdate):
         data_to_update['hashed_password'] = get_password_hash(user_data.password)
 
     if data_to_update:
-        await UsersDAO.update(filter_by={'id': user_id}, data=data_to_update)
+        return await UsersDAO.update(filter_by={'id': user_id}, data=data_to_update)
+    return None
 
 
 async def delete_user(user_id: UUID):
