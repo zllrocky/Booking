@@ -25,3 +25,4 @@ class SUserUpdate(BaseModel):
     email: EmailStr | None = None
     old_password: OptionalPassword
     password: OptionalPassword
+

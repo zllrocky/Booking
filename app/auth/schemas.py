@@ -2,11 +2,11 @@ from pydantic import BaseModel
 from pydantic import EmailStr
 
 
-class Token(BaseModel):
+class SToken(BaseModel):
     access_token: str
     token_type: str
 
 
-class TokenData(BaseModel):
+class STokenData(BaseModel):
     email: EmailStr | None = None
 

@@ -13,4 +13,4 @@ class Hotels(Base):
     longitude: Mapped[float] = mapped_column(nullable=False)
     rooms_quantity: Mapped[int] = mapped_column(nullable=False)
     image_id: Mapped[int] = mapped_column(nullable=False)
-    services: Mapped[list[str]] = mapped_column(JSONB, nullable=False)
+    services: Mapped[list[str]] = mapped_column(JSONB, nullable=True)

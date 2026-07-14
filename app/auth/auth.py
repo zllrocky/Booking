@@ -8,7 +8,7 @@ from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 
 from app.users.models import Users
-from app.auth.schemas import TokenData
+from app.auth.schemas import STokenData
 from app.config import settings
 from app.users.dao import UsersDAO
 
@@ -57,7 +57,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         email = payload.get("sub")
         if email is None:
             raise credentials_exception
-        token_data = TokenData(email=email)
+        token_data = STokenData(email=email)
     except InvalidTokenError:
         raise credentials_exception
     user = await UsersDAO.find_one_or_none(email=token_data.email)

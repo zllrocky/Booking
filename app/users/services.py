@@ -4,10 +4,10 @@ from fastapi import HTTPException
 
 from app.auth.auth import get_password_hash, verify_password
 from app.users.dao import UsersDAO
-from app.users.schemas import SUserAuth, SUserUpdate
+from app.users.schemas import SUserAuth, SUserUpdate, SUserRead
 
 
-async def register_user(user_data: SUserAuth):
+async def register_user(user_data: SUserAuth) -> SUserRead:
     existing_user = await UsersDAO.find_one_or_none(email=user_data.email)
     if existing_user:
         raise HTTPException(status_code=409, detail='The user already exists')
@@ -53,4 +53,6 @@ async def update_user(user_id: UUID, user_data: SUserUpdate):
 
 
 async def delete_user(user_id: UUID):
-    await UsersDAO.delete(id=user_id)
+    result = await UsersDAO.delete(id=user_id)
+    if not result:
+        raise HTTPException(status_code=404, detail='Not found')
