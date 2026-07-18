@@ -12,7 +12,7 @@ class Rooms(Base):
 
     room_id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.hotel_id', ondelete='CASCADE'))
-    name: Mapped[str] = mapped_column(nullable=False)
-    price: Mapped[Decimal] = mapped_column(Numeric(precision=10, scale=2), nullable=False)
-    quantity: Mapped[int] = mapped_column(nullable=False)
+    name: Mapped[str]
+    price: Mapped[Decimal] = mapped_column(Numeric(precision=10, scale=2))
+    quantity: Mapped[int]
     facilities: Mapped[list[str]] = mapped_column(JSONB, nullable=True)

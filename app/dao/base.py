@@ -54,3 +54,4 @@ class BaseDAO:
             result = await session.execute(query)
             await session.commit()
             return result.scalar_one_or_none()
+

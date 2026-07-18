@@ -36,7 +36,7 @@ async def read_users_me(
                           'To change your password, you must provide your current password (old_password) for verification.')
 async def update_user_profile(
     user_data: SUserUpdate,
-    current_user = Depends(get_current_user)
+    current_user: Users = Depends(get_current_active_user)
 ):
     return await update_user(user_id=current_user.id, user_data=user_data)
 
@@ -46,7 +46,7 @@ async def update_user_profile(
                            ' users account from the database.<br> The user is automatically'
                            ' identified by the JWT token stored in cookies.<br>'
                            ' Warning: This action cannot be undone.')
-async def delete_user_profile(current_user = Depends(get_current_user)):
+async def delete_user_profile(current_user: Users = Depends(get_current_active_user)):
     await delete_user(user_id=current_user.id)
 
 

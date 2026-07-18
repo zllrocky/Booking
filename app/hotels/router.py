@@ -4,6 +4,7 @@ from app.auth.auth import get_current_active_user
 from app.hotels.schemas import SHotel, SHotelAdd, SHotelUpdate
 from app.hotels.services import get_all_info_hotels, get_hotel_info, add_hotel, \
     update_hotel_info, delete_hotel
+from app.users.models import Users
 
 router = APIRouter(prefix='/hotels', tags=['Hotels'])
 
@@ -24,7 +25,7 @@ async def get_hotel(hotel_id: int) -> SHotel:
 
 @router.post('', status_code=201, summary='Add new hotel',
              description='Creates a new hotel. ID is generated automatically.')
-async def post_hotel(hotel_data: SHotelAdd, _ = Depends(get_current_active_user)) -> SHotel:
+async def post_hotel(hotel_data: SHotelAdd, user: Users = Depends(get_current_active_user)) -> SHotel:
     return await add_hotel(hotel_data)
 
 
