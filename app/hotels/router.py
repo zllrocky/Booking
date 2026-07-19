@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from app.auth.auth import get_current_active_user
 from app.hotels.schemas import SHotel, SHotelAdd, SHotelUpdate
 from app.hotels.services import get_all_info_hotels, get_hotel_info, add_hotel, \
     update_hotel_info, delete_hotel
-from app.users.models import Users
+from app.dependencies import DependsAdminOrOwner
 
 router = APIRouter(prefix='/hotels', tags=['Hotels'])
 
@@ -25,7 +24,7 @@ async def get_hotel(hotel_id: int) -> SHotel:
 
 @router.post('', status_code=201, summary='Add new hotel',
              description='Creates a new hotel. ID is generated automatically.')
-async def post_hotel(hotel_data: SHotelAdd, user: Users = Depends(get_current_active_user)) -> SHotel:
+async def post_hotel(hotel_data: SHotelAdd, _: DependsAdminOrOwner) -> SHotel:
     return await add_hotel(hotel_data)
 
 
@@ -38,7 +37,7 @@ async def post_hotel(hotel_data: SHotelAdd, user: Users = Depends(get_current_ac
                           '-rooms_quantity: total number of rooms<br>'
                           '-image_id: ID of the image file')
 async def update_hotel(hotel_id: int, hotel_data: SHotelUpdate,
-                       _ = Depends(get_current_active_user)) -> SHotel:
+                       _: DependsAdminOrOwner) -> SHotel:
     return await update_hotel_info(hotel_id, hotel_data)
 
 
@@ -46,5 +45,5 @@ async def update_hotel(hotel_id: int, hotel_data: SHotelUpdate,
                description='Permanently delete a hotel from the database.'
                            'Warning: This action cannot be undone.<br>'
                            'The hotel will be removed from all listings and search results.')
-async def remove_hotel(hotel_id: int, _ = Depends(get_current_active_user)) -> None:
+async def remove_hotel(hotel_id: int, _: DependsAdminOrOwner) -> None:
     await delete_hotel(hotel_id=hotel_id)

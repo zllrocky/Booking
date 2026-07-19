@@ -1,11 +1,9 @@
-from fastapi import APIRouter, Depends
-from typing import Annotated
+from fastapi import APIRouter
 
-from app.auth.auth import get_current_active_user, get_current_user
 from app.users.schemas import SUserRead, SUserUpdate
-from app.users.models import Users
 from app.users.services import register_user, update_user, delete_user
 from app.users.schemas import SUserAuth
+from app.dependencies import DependsActiveUser
 
 
 router = APIRouter(prefix='/user', tags=['Users'])
@@ -23,9 +21,7 @@ async def create_user(user_data: SUserAuth):
 @router.get("/me/", summary='Get User Info',
             description="Returns the current user's data (ID, email, activity status).<br>"
                         " Available only to authorized users with a valid JWT token.")
-async def read_users_me(
-    current_user: Annotated[Users, Depends(get_current_active_user)],
-):
+async def read_users_me(current_user: DependsActiveUser):
     return SUserRead.model_validate(current_user)
 
 
@@ -36,7 +32,7 @@ async def read_users_me(
                           'To change your password, you must provide your current password (old_password) for verification.')
 async def update_user_profile(
     user_data: SUserUpdate,
-    current_user: Users = Depends(get_current_active_user)
+    current_user: DependsActiveUser
 ):
     return await update_user(user_id=current_user.id, user_data=user_data)
 
@@ -46,7 +42,7 @@ async def update_user_profile(
                            ' users account from the database.<br> The user is automatically'
                            ' identified by the JWT token stored in cookies.<br>'
                            ' Warning: This action cannot be undone.')
-async def delete_user_profile(current_user: Users = Depends(get_current_active_user)):
+async def delete_user_profile(current_user: DependsActiveUser):
     await delete_user(user_id=current_user.id)
 
 
