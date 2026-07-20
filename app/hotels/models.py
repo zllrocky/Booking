@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import JSONB
 from app.database import Base
+from app.rooms.models import Rooms
 
 
 class Hotels(Base):
@@ -14,3 +15,5 @@ class Hotels(Base):
     rooms_quantity: Mapped[int]
     image_id: Mapped[int]
     services: Mapped[list[str]] = mapped_column(JSONB, nullable=True)
+
+    rooms: Mapped[list["Rooms"]] = relationship(back_populates="hotel")

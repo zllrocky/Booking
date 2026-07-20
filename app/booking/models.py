@@ -4,9 +4,15 @@ import enum
 from decimal import Decimal
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.users.models import Users
+    from app.rooms.models import Rooms
+
 
 
 class BookingStatus(enum.Enum):
@@ -28,3 +34,6 @@ class Bookings(Base):
     total_cost: Mapped[Decimal]
     total_days: Mapped[int]
     status: Mapped[BookingStatus] = mapped_column(default=BookingStatus.PENDING)
+
+    user: Mapped["Users"] = relationship(back_populates="bookings")
+    room: Mapped["Rooms"] = relationship(back_populates="bookings")
