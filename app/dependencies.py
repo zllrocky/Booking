@@ -50,5 +50,6 @@ class RoleChecker:
 
 
 DependsActiveUser = Annotated[Users, Depends(get_current_active_user)]
+DependsAdmin = Annotated[Users, Depends(RoleChecker([Role.ADMIN]))]
 DependsAdminOrOwner = Annotated[Users, Depends(RoleChecker([Role.ADMIN, Role.OWNER]))]
 DependsAdminOrUser = Annotated[Users, Depends(RoleChecker([Role.ADMIN, Role.USER]))]

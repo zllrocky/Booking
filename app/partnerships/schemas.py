@@ -14,3 +14,6 @@ class SPartnershipsRequestResponse(SPartnershipsRequestCreate):
     id : int
     status: RequestStatus
     created_at: datetime
+
+class SPartnershipsUpdate(BaseModel):
+    status: RequestStatus

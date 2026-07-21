@@ -14,8 +14,10 @@ from app.config import settings
 router = APIRouter(prefix='/auth', tags=['Auth'])
 
 
-@router.post("/login", summary="User Authentication",
-             description="Accepts an email address and password, and returns a JWT token")
+@router.post("/login", summary="[PUBLIC] User Authentication",
+             description='**Access:** Public (no authorization required).\n'
+                         'Authenticates a user and returns a JWT bearer token '
+                         'used for accessing protected endpoints.')
 async def login_for_user(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> SToken:
@@ -23,13 +25,13 @@ async def login_for_user(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
+            detail='Incorrect username or password',
+            headers={'WWW-Authenticate': 'Bearer'},
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    return SToken(access_token=access_token, token_type="bearer")
+    return SToken(access_token=access_token, token_type='bearer')
 
 
