@@ -16,7 +16,7 @@ async def get_hotel_info(hotel_id: int) -> SHotel:
     return current_hotel
 
 
-async def add_hotel(hotel_data: SHotelAdd):
+async def add_hotel(hotel_data: SHotelAdd) -> SHotel:
     hotel_dict = hotel_data.model_dump()
     new_hotel = await HotelsDAO.add(**hotel_dict)
     if not new_hotel:
@@ -24,7 +24,7 @@ async def add_hotel(hotel_data: SHotelAdd):
     return new_hotel
 
 
-async def update_hotel_info(hotel_id: int, hotel_data: SHotelUpdate):
+async def update_hotel_info(hotel_id: int, hotel_data: SHotelUpdate) -> SHotel:
     current_hotel = await HotelsDAO.find_one_or_none(hotel_id=hotel_id)
     if not current_hotel:
         raise HTTPException(status_code=404, detail='Hotel not found')
@@ -33,7 +33,7 @@ async def update_hotel_info(hotel_id: int, hotel_data: SHotelUpdate):
     return update_hotel
 
 
-async def delete_hotel(hotel_id: int):
+async def delete_hotel(hotel_id: int) -> None:
     result = await HotelsDAO.delete(hotel_id=hotel_id)
     if not result:
         raise HTTPException(status_code=404, detail='Not found')

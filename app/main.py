@@ -6,6 +6,8 @@ from app.hotels.router import router as hotels_router
 from app.rooms.router import router as rooms_router
 from app.booking.router import router as bookings_router
 from app.partnerships.router import router as partnerships_router
+from app.admin.router import router as admins_router
+
 
 app = FastAPI(title="Booking")
 
@@ -16,3 +18,4 @@ app.include_router(hotels_router)
 app.include_router(rooms_router)
 app.include_router(bookings_router)
 app.include_router(partnerships_router)
+app.include_router(admins_router)

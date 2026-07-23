@@ -9,10 +9,16 @@ class BaseDAO:
 
 
     @classmethod
-    async def find_all(cls, **filter_by):
+    async def find_all(cls, limit: int | None = None, offset: int | None = None, **filter_by):
         clean_filters = {k: v for k, v in filter_by.items() if v is not None}
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**clean_filters)
+
+            if limit is not None:
+                query = query.limit(limit)
+            if offset is not None:
+                query = query.offset(offset)
+
             result = await session.execute(query)
             return result.scalars().all()
 
